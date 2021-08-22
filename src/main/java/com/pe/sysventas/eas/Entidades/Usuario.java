@@ -6,6 +6,7 @@
 package com.pe.sysventas.eas.Entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -30,6 +31,13 @@ public class Usuario implements Serializable{
      String password;
     
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="idcliente", referencedColumnName = "idcliente")
+    @JoinColumn(name="fk_cliente", referencedColumnName = "idcliente")
     private Cliente cliente;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_personal", referencedColumnName = "idpersonal")
+    private Personal personal;
+    
+   @OneToMany(mappedBy = "usuario")
+    private List<rol_user> rol_user;
 }

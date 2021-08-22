@@ -7,6 +7,7 @@ package com.pe.sysventas.eas.controller;
 
 import com.pe.sysventas.eas.Entidades.*;
 import com.pe.sysventas.eas.Interfaces.*;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,13 +37,20 @@ public class controlador {
     public String ingresar(Model model){
         Usuario us=new Usuario();
         Cliente cli= new Cliente();
-        us.setEmail("luis@corre.com");
-        us.setPassword("luis");
-        cli.setNombre("Luis");
+        us.setEmail("diego@corre.com");
+        us.setPassword("diego");
+        cli.setNombre("Diego");
         cli.setApellido("Quispe Lopez");
         cli.setDireccion("AQP");
+        
         us.setCliente(cli);
         user.guardar(us);
+        List<Usuario> c=user.listar();
+        for (Usuario cl:c)
+        {
+            System.out.println(cl.getEmail());
+            System.out.println(cl.getCliente().getNombre());
+        }
         return "redirect:/";
     }
 }
