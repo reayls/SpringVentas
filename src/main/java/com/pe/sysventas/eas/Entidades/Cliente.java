@@ -5,7 +5,9 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -32,6 +34,8 @@ public class Cliente implements Serializable{
     @Column(name="direccion")
     private String direccion;
     
-    @OneToOne(mappedBy = "cliente")
-    private Usuario usuario;
+    @ManyToMany(mappedBy = "cliente")
+    @JsonIgnore
+    private Set<Venta> ventas; 
+    
 }

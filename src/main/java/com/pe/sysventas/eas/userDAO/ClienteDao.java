@@ -8,7 +8,6 @@ package com.pe.sysventas.eas.userDAO;
 import com.pe.sysventas.eas.Entidades.*;
 import com.pe.sysventas.eas.Interfaces.ICliente;
 import com.pe.sysventas.eas.Interfaces.IClienteCrud;
-import com.pe.sysventas.eas.Interfaces.IUserCrud;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

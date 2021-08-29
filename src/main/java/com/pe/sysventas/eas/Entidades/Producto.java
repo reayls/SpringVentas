@@ -5,12 +5,11 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
-
 
 /**
  *
@@ -18,39 +17,35 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name="usuarios")
-
-public class Usuario implements Serializable{
+@Table(name="productos")
+public class Producto  implements Serializable{
+    
     private static final long serialVersionUID=1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idusuario")
-     long id;
+    @Column(name="idproducto")
+    private long idProducto;
     
-    @Column(name="email")
-     String email;
+    private String nombre;
     
-    @Column(name="password")
-     String password;
+    private double costo;
     
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="fk_personal", referencedColumnName = "idpersonal")
-    private Personal personal;
-        
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinTable(name="rol_user", 
-            joinColumns=@JoinColumn(name="fk_user"), 
-            inverseJoinColumns = @JoinColumn(name="fk_rol") )
-    private Set<Rol> roles;   
+    private double precio;
+    
+    private int stock;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "producto", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private Set<detalle_venta> detventas;
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 47 * hash + (int) (this.id ^ (this.id >>> 32));
+        int hash = 5;
+        hash = 79 * hash + (int) (this.idProducto ^ (this.idProducto >>> 32));
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -62,11 +57,16 @@ public class Usuario implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Usuario other = (Usuario) obj;
-        if (this.id != other.id) {
+        final Producto other = (Producto) obj;
+        if (this.idProducto != other.idProducto) {
             return false;
         }
         return true;
-    } 
+    }
 
+    @Override
+    public String toString() {
+        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", costo=" + costo + ", precio=" + precio + ", stock=" + stock + '}';
+    }
+      
 }

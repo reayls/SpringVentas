@@ -5,11 +5,10 @@
  */
 package com.pe.sysventas.eas.userDAO;
 
-import com.pe.sysventas.eas.Entidades.Usuario;
+import com.pe.sysventas.eas.Entidades.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pe.sysventas.eas.Interfaces.IUser;
-import com.pe.sysventas.eas.Interfaces.IUserCrud;
+import com.pe.sysventas.eas.Interfaces.*;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDao implements IUserCrud{
     @Autowired
     IUser userdao;
-
+    
+    @Autowired
+    IRol irol;
+    
     @Override
     @Transactional(readOnly = true)
     public List<Usuario> listar() {
@@ -32,7 +34,7 @@ public class UserDao implements IUserCrud{
     @Transactional
     public boolean guardar(Usuario usuario) {
         boolean respuesta=false;
-        userdao.save(usuario);
+            userdao.save(usuario);
         respuesta=true;
         return respuesta;
     }
@@ -53,4 +55,19 @@ public class UserDao implements IUserCrud{
         return usuario;
     }
     
+    @Override
+    @Transactional(readOnly = true)
+    public Rol buscarRol(Rol rol) {
+        rol = irol.findById(rol.getIdrol()).orElse(null);
+        return rol;
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Rol buscarRolId(int rolid) {
+        Rol rol = new Rol();
+                rol=irol.findById(Long.valueOf(rolid)).orElse(null);
+        return rol;
+    }
+         
 }

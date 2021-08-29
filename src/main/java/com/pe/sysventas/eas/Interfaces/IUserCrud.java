@@ -5,10 +5,8 @@
  */
 package com.pe.sysventas.eas.Interfaces;
 
-import com.pe.sysventas.eas.Entidades.Usuario;
+import com.pe.sysventas.eas.Entidades.*;
 import java.util.List;
-import org.springframework.stereotype.Service;
-
 /**
  *
  * @author Deary
@@ -22,4 +20,8 @@ public interface IUserCrud {
     public boolean eliminar(Usuario usuario);
     
     public Usuario buscar(Usuario usuario);
+    
+    public Rol buscarRol(Rol rol);
+    
+    public Rol buscarRolId(int rolid);
 }

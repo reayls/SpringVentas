@@ -4,7 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Login</title>
         <meta charset="UTF-8">
@@ -12,10 +12,19 @@ and open the template in the editor.
     </head>
     <body>
         <h1>Inciar Sesion</h1>
-        <form action="ingresar" method="POST">
-            <input type="text" name="user"/>
-            <input type="password" name="pass"/>
+        <form action="/home" method="POST">
+            <input type="text" name="username"/>
+            <input type="password" name="password"/>
             <button type="submit">Ingresar</button>
         </form>
+        
+        <form th:action="@{/authenticated}" method="Post">
+            username: <input type="text" name="username" id="username"/>
+            password: <input type="password" name="password" id="password"/>
+            <button type="submit">Ingresar</button>
+        </form>
+        
+        
+        
     </body>
 </html>

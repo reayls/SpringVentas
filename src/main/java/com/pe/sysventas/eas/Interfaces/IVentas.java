@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Deary
  */
-public interface ICliente extends JpaRepository<Cliente,Long>{
+public interface IVentas extends JpaRepository<Venta,Long>{
     
 }

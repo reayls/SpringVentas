@@ -6,12 +6,13 @@
 package com.pe.sysventas.eas.Interfaces;
 
 import com.pe.sysventas.eas.Entidades.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author Deary
  */
-public interface IUser extends CrudRepository<Usuario,Long>{
-    
+public interface IUser extends JpaRepository<Usuario,Long>{
+    Usuario findByEmail(String username);
 }

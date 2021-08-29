@@ -5,13 +5,13 @@
  */
 package com.pe.sysventas.eas.Interfaces;
 
-import com.pe.sysventas.eas.Entidades.*;
+import com.pe.sysventas.eas.Entidades.Personal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Deary
  */
-public interface ICliente extends JpaRepository<Cliente,Long>{
+public interface IPersonal extends JpaRepository<Personal,Long>{
     
 }

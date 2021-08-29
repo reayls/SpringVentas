@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Venta</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link th:href="@{/styles.css}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class=container>
+            <header th:replace="layout/plantilla :: header"></header>
+            <h1>Nueva Venta</h1>
+            <!-- Button trigger modal Productos -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProductos">
+                Ver Productos
+            </button>
+            <form th:action="@{/ventas/generar-venta}" method="POST" th:object="${venta}">
+                <input type="number" name="cliente.id" th:field="*{cliente.id}" >
+                <input type="text" name="cliente.nombre" th:field="*{cliente.nombre}" >
+                <input type="text" name="fecha" th:field="*{fecha}" >
+                Total: <p id="totalfinal" th:text="*{total}">total</p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbod">
+                        <tr th:each="c :${carrito}">
+                            <td th:text="${cStat.index+1}"></td>
+                            <td th:text="${c.producto.nombre}"></td>
+                            <td th:text="${c.precio}"></td>
+                            <td th:text="${c.cantidad}"></td>
+                            <td th:text="${c.totalxproducto}"></td>
+                            <td><button class="btn btn-danger quitar" type="button" th:data-idetalle="${cStat.index}">Quitar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br>
+                detalle ventas:
+                <br>
+                <br>
+
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
+
+
+        <!-- Modal Productos-->
+        <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductos" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Costo</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Agregar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="producto :${productos}">
+                                    <td th:text="${productoStat.index+1}"></td>
+                                    <td th:text="${producto.nombre}"></td>
+                                    <td th:text="${producto.costo}"></td>
+                                    <td th:text="${producto.precio}"></td>
+                                    <td th:text="${producto.stock}"></td>
+                                    <td><button class="btn btn-success addcar" type="button" th:data-idproducto="${producto.idProducto}">Agregar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script th:src="@{/scriptVentas.js}"></script>
+    </body>
+</html>

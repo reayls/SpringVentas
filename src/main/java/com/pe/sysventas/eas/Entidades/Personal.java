@@ -6,6 +6,7 @@
 package com.pe.sysventas.eas.Entidades;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -34,5 +35,8 @@ public class Personal implements Serializable{
     
     @OneToOne(mappedBy = "personal")
     private Usuario usuario;
+    
+    @ManyToMany(mappedBy = "personal")
+    private Set<Venta> ventas; 
     
 }

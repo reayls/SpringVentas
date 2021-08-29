@@ -6,7 +6,9 @@
 package com.pe.sysventas.eas.Entidades;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -29,7 +31,7 @@ public class Rol implements Serializable{
     
     private String descripcion;
     
-    @OneToMany(mappedBy = "rol")
-    private List<rol_user> rol_user;
+    @ManyToMany(mappedBy = "roles")
+    private Set<Usuario> usuarios; 
     
 }

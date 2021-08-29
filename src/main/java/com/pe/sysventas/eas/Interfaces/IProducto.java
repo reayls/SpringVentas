@@ -5,13 +5,13 @@
  */
 package com.pe.sysventas.eas.Interfaces;
 
-import com.pe.sysventas.eas.Entidades.*;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.pe.sysventas.eas.Entidades.Producto;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author Deary
  */
-public interface ICliente extends JpaRepository<Cliente,Long>{
-    
+public interface IProducto extends CrudRepository<Producto,Long>{
+    Producto findByIdProducto(Long idpro);
 }
