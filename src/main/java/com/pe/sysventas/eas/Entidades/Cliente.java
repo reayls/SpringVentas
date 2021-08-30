@@ -6,7 +6,9 @@
 package com.pe.sysventas.eas.Entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
@@ -18,6 +20,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="clientes")
+
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" }) 
 public class Cliente implements Serializable{
     private static final long serialVersionUID=1L;
     @Id
@@ -34,8 +38,8 @@ public class Cliente implements Serializable{
     @Column(name="direccion")
     private String direccion;
     
-    @ManyToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente")
     @JsonIgnore
-    private Set<Venta> ventas; 
+    private List<Venta> ventas; 
     
 }

@@ -62,9 +62,6 @@ public class controlador {
         System.out.println("usuario logeado es: " + user.getUsername());
         Usuario pe = iuser.findByEmail(user.getUsername());
         System.out.println(pe.getPersonal().getNombre());
-        Iterable<Producto> productos = iproducto.findAll();
-
-        model.addAttribute("productos", productos);
 
         return "home";
 

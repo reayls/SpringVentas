@@ -5,6 +5,7 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.Data;
@@ -33,12 +34,13 @@ public class detalle_venta implements Serializable{
     
     private double totalxproducto;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="fk_producto", referencedColumnName = "idproducto")
     private Producto producto;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="fk_venta", referencedColumnName = "idventa")
+    @JsonIgnore
     private Venta venta;
 
     @Override

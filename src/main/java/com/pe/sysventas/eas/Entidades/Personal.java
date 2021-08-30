@@ -5,6 +5,7 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
@@ -34,9 +35,11 @@ public class Personal implements Serializable{
     private String direccion;
     
     @OneToOne(mappedBy = "personal")
+    @JsonIgnore
     private Usuario usuario;
     
     @ManyToMany(mappedBy = "personal")
+    @JsonIgnore
     private Set<Venta> ventas; 
     
 }

@@ -46,7 +46,13 @@ public class controllerVenta {
     
     @GetMapping("")
     public String ventas(){
+        
         return "view-ventas";
+    }
+    @GetMapping("vents")
+    public ResponseEntity<List<Cliente>> dasd(){
+        
+        return new ResponseEntity<List<Cliente>>(icliente.findAll(), HttpStatus.OK);
     }
     @GetMapping("/nueva-venta")
     public String venta(Model model, HttpServletRequest request) {
@@ -104,6 +110,7 @@ public class controllerVenta {
         double total=0;
         for (detalle_venta det: carrito){
             total+=det.getCantidad()*det.getPrecio();
+            det.setVenta(venta);
         }
         venta.setFecha(dtf.format(LocalDateTime.now()));
         venta.setTotal(total);
@@ -111,22 +118,37 @@ public class controllerVenta {
         venta.setCliente(icliente.findById(venta.getCliente().getId()).get());
         venta.setPersonal(iuser.findByEmail(user.getUsername()).getPersonal());
         venta.setDetventas(carrito);
-        for(detalle_venta de: carrito) {
-            de.setVenta(venta);
-        }
-        
-        System.out.println(venta.getCliente().getId());
+
+        System.out.println(venta.getCliente().getNombre());
         System.out.println(venta.getFecha());
         System.out.println(venta.getPersonal().getNombre());
         System.out.println(venta.getTotal());
         
-        carrito.stream().forEach(e->{
-            System.out.println(e.getVenta().getTotal());
-                    });
-        carrito.clear();
         iventa.save(venta);
+        carrito.clear();
         actualizarCarrito(carrito,request);
-        return "index";
+        
+        /*List<detalle_venta> list = new ArrayList<>();
+        
+        Venta ven= new Venta();
+        
+        ven.setEstado("completaod");
+        ven.setFecha(dtf.format(LocalDateTime.now()));
+        ven.setTotal(120);
+        ven.setCliente(icliente.findById(1L).get());
+        ven.setPersonal(ipersonal.findById(1L).get());
+        
+        detalle_venta de= new  detalle_venta();
+        de.setCantidad(10);
+        de.setCosto(12);
+        de.setPrecio(15);
+        de.setProducto(iproducto.findById(1L).get());
+        de.setTotalxproducto(50);
+        de.setVenta(ven);
+        //ven.setDetventas(list);
+        list.add(de);
+        iventa.save(ven);*/
+        return "redirect:/home";
     }
     private List<detalle_venta> obtenerCarrito(HttpServletRequest request) {
         List<detalle_venta> carrito = (List<detalle_venta>) request.getSession().getAttribute("carrito");

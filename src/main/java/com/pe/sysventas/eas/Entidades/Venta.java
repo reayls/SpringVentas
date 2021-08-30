@@ -5,6 +5,7 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
