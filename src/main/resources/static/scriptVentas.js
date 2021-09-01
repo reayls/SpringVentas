@@ -12,8 +12,30 @@ document.addEventListener("click", (e) => {
         console.log(e.target.getAttribute("data-idproducto"));
         addCarrito(e);
     }
+    if (e.target.matches("#btcliente"))
+    {
+        addCliente();
+    }
 })
-
+function addCliente(){
+    let idcl=document.getElementById('cliente.id').value;
+    let name=document.getElementById('namecliente');
+    ajax({method: "GET",
+        url: `/clientes/buscar/${idcl}`,
+        success: (resp) => {
+            if(resp!=null){
+                console.log(resp);
+                name.textContent=`${resp.nombre} ${resp.apellido}`;
+            }else{
+                name.textContent=`Cliente no Encontrado`;
+            }
+        },
+        error: (err) => {
+            console.error("error en ", err)
+        },
+        data: null,
+    });
+}
 function quitarDecarrito(e) {
     let idetalle = e.target.getAttribute("data-idetalle");
     ajax({method: "Get",
@@ -73,8 +95,14 @@ const ajax = (options) => {
             return;
         }
         if (xhr.status >= 200 && xhr.status < 300) {
-            let objson = JSON.parse(xhr.response);
-            success(objson);
+            
+            if(isJsonObject(xhr.response)){
+                let objson = JSON.parse(xhr.response);
+                success(objson);
+            }
+            else{
+                success(null);
+            }
         } else {
             let message = xhr.statusText || "ocurrio un error";
             error(`Error ${xhr.status} : ${message}`);
@@ -83,4 +111,13 @@ const ajax = (options) => {
     xhr.open(method || "GET", url, true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
     xhr.send(JSON.stringify(data));
+}
+function isJsonObject(obj) {
+    try {
+        JSON.parse(obj);
+        console.log("entrro");
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

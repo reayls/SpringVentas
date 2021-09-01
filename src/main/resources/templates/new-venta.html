@@ -13,18 +13,26 @@ and open the template in the editor.
         <link th:href="@{/styles.css}" rel="stylesheet"/>
     </head>
     <body>
+        <header th:replace="layout/plantilla :: header"></header>
         <div class=container>
-            <header th:replace="layout/plantilla :: header"></header>
-            <h1>Nueva Venta</h1>
-            <!-- Button trigger modal Productos -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProductos">
-                Ver Productos
-            </button>
+            <h1 class="text-center">Nueva Venta</h1>
+
             <form th:action="@{/ventas/generar-venta}" method="POST" th:object="${venta}">
-                <input type="number" name="cliente.id" th:field="*{cliente.id}" >
-                <input type="text" name="cliente.nombre" th:field="*{cliente.nombre}" >
-                <input type="text" name="fecha" th:field="*{fecha}" >
-                Total: <p id="totalfinal" th:text="*{total}">total</p>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <input type="number" name="cliente.id" th:field="*{cliente.id}" required placeholder="Ingrese el ID del Cliente">
+                        <button type="button" class="btn btn-primary"  id="btcliente">Buscar</button>
+                    </div>
+                    <!-- Button trigger modal Productos -->
+                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalProductos">
+                        Ver Productos
+                    </button>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size: 2rem;">
+                    <b><p name="namecliente" id="namecliente"></p></b>
+                    <label name="fecha" th:text="*{fecha}"></label>
+                </div>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -47,13 +55,12 @@ and open the template in the editor.
                         </tr>
                     </tbody>
                 </table>
+                <div class="card-footer d-flex justify-content-evenly" >
+                    <button class="btn btn-success" type="submit">Generar Venta</button> <button class="btn btn-danger" type="button">Cancelar Venta</button><label style="font-size: 2.3rem;">Total: s/<spam id="totalfinal" th:text="*{total}">total</spam></label>
+                </div>
+                <br>
 
-                <br>
-                detalle ventas:
-                <br>
-                <br>
 
-                <button type="submit">Guardar</button>
             </form>
         </div>
 

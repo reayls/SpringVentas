@@ -5,8 +5,7 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -20,26 +19,28 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="clientes")
-
-@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" }) 
 public class Cliente implements Serializable{
     private static final long serialVersionUID=1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idcliente")
+    @JsonView({Views.Clientes.class})
     private long id;
     
     @Column(name="nombre")
+    @JsonView({Views.Clientes.class})
     private String nombre;
     
     @Column(name="apellido")
+    @JsonView({Views.Clientes.class})
     private String apellido;
     
     @Column(name="direccion")
+    @JsonView({Views.Clientes.class})
     private String direccion;
     
-    @OneToMany(mappedBy = "cliente")
-    @JsonIgnore
-    private List<Venta> ventas; 
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "cliente")
+    @JsonView({Views.ClientesVentas.class})
+    private List<Venta> ventas;
     
 }

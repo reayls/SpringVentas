@@ -5,7 +5,7 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
@@ -26,23 +26,35 @@ public class Venta implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idventa")
+    @JsonView({Views.ClientesVentas.class})
     private long idVenta;
     
+    @JsonView({Views.ClientesVentas.class})
     private String fecha;
     
+    @JsonView({Views.ClientesVentas.class})
     private double total;
     
+    @JsonView({Views.ClientesVentas.class})
     private String estado;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(fetch= FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name="fk_cliente", referencedColumnName = "idcliente")
     private Cliente cliente ;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(fetch= FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name="fk_personal", referencedColumnName = "idpersonal")
+    @JsonView({Views.ClientesVentas.class})
     private Personal personal;
     
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "venta", cascade = CascadeType.ALL)
+    @JsonView({Views.ClientesVentasDetalle.class})
     private List<detalle_venta> detventas;
-    
+
+    public void setDetventas(List<detalle_venta> detventas) {
+        this.detventas = detventas;
+        for(detalle_venta d: detventas){
+            d.setVenta(this);
+        }
+    }
 }

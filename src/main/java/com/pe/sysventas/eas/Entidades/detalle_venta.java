@@ -5,8 +5,9 @@
  */
 package com.pe.sysventas.eas.Entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -24,23 +25,28 @@ public class detalle_venta implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="iddetalle")
+    @JsonView({Views.ClientesVentasDetalle.class})
     private long idDetalle;
     
+    @JsonView({Views.ClientesVentasDetalle.class})
     private double costo;
     
+    @JsonView({Views.ClientesVentasDetalle.class})
     private double precio;
     
+    @JsonView({Views.ClientesVentasDetalle.class})
     private int cantidad;
     
+    @JsonView({Views.ClientesVentasDetalle.class})
     private double totalxproducto;
     
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="fk_producto", referencedColumnName = "idproducto")
+    @JsonView({Views.ClientesVentasDetalle.class})
     private Producto producto;
     
     @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="fk_venta", referencedColumnName = "idventa")
-    @JsonIgnore
     private Venta venta;
 
     @Override
@@ -67,11 +73,4 @@ public class detalle_venta implements Serializable{
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "detalle_venta{" + "idDetalle=" + idDetalle + ", costo=" + costo + ", precio=" + precio + ", cantidad=" + cantidad + ", total=" + totalxproducto + '}';
-    }
-    
-    
 }

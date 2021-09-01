@@ -36,7 +36,7 @@ public class Producto  implements Serializable{
     private int stock;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "producto", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToMany(fetch= FetchType.LAZY, mappedBy = "producto", cascade = {CascadeType.MERGE})
     private Set<detalle_venta> detventas;
 
     @Override
@@ -63,10 +63,4 @@ public class Producto  implements Serializable{
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", costo=" + costo + ", precio=" + precio + ", stock=" + stock + '}';
-    }
-      
 }

@@ -5,6 +5,7 @@
  */
 package com.pe.sysventas.eas.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.pe.sysventas.eas.Entidades.*;
 import com.pe.sysventas.eas.Interfaces.*;
 import java.time.LocalDateTime;
@@ -19,9 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -45,25 +44,25 @@ public class controllerVenta {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     @GetMapping("")
-    public String ventas(){
-        
+    public String ventas(Model model){
+        model.addAttribute("ventas", iventa.findAll());
         return "view-ventas";
     }
-    @GetMapping("vents")
-    public ResponseEntity<List<Cliente>> dasd(){
+    
+    @RequestMapping(value="/vents", method=RequestMethod.GET)
+    @JsonView(Views.ClientesVentasDetalle.class)
+    public ResponseEntity<List<Cliente>> ads(){
         
         return new ResponseEntity<List<Cliente>>(icliente.findAll(), HttpStatus.OK);
     }
+    
     @GetMapping("/nueva-venta")
     public String venta(Model model, HttpServletRequest request) {
         Venta venta = new Venta();
-        Cliente cl = new Cliente();
-        cl.setId(1L);
         double total = 0;
         List<detalle_venta> carrito = this.obtenerCarrito(request);
         for (detalle_venta car: carrito) total += car.getCantidad()*car.getPrecio();
         venta.setFecha(dtf.format(LocalDateTime.now()));
-        venta.setCliente(cl);
         venta.setTotal(total);
         model.addAttribute("carrito", carrito);
         model.addAttribute("venta", venta);
@@ -78,14 +77,24 @@ public class controllerVenta {
         Long idproducto = Long.parseLong(request.getParameter("id"));
         int cantid = Integer.parseInt(request.getParameter("cantidad"));
         Producto buscarpro = iproducto.findByIdProducto(idproducto);
-
-        detalle_venta detalletotal = new detalle_venta();
-        detalletotal.setProducto(buscarpro);
-        detalletotal.setCosto(buscarpro.getCosto());
-        detalletotal.setPrecio(buscarpro.getPrecio());
-        detalletotal.setCantidad(cantid);
-        detalletotal.setTotalxproducto(cantid * buscarpro.getPrecio());
-        carrito.add(detalletotal);
+        System.out.println("precio :"+buscarpro.getPrecio());
+        detalle_venta newdetalle = new detalle_venta();
+        newdetalle.setProducto(buscarpro);
+        newdetalle.setCosto(buscarpro.getCosto());
+        newdetalle.setPrecio(buscarpro.getPrecio());
+        newdetalle.setCantidad(cantid);
+        newdetalle.setTotalxproducto(cantid * buscarpro.getPrecio());
+        
+        boolean existenCarrito=false;
+        for(detalle_venta d:carrito)
+        {
+            if(d.getProducto().getIdProducto()==buscarpro.getIdProducto())
+            {
+                existenCarrito=true;
+                break;
+            }
+        }
+        if(!existenCarrito)carrito.add(newdetalle);
         actualizarCarrito(carrito,request);
         return new ResponseEntity<List<detalle_venta>>(carrito, HttpStatus.OK);
     }
@@ -93,9 +102,6 @@ public class controllerVenta {
     @GetMapping(value = "/quitar")
     public ResponseEntity<List<detalle_venta>> quitarDelCarrito(HttpServletRequest request) {
         int indice=Integer.parseInt(request.getParameter("indice"));
-        //String ind=request.getParameter("indice");
-        System.out.println("indee: "+indice);
-        //System.out.println("indee: "+ind);
         List<detalle_venta> carrito = this.obtenerCarrito(request);
         if (carrito != null && carrito.size() > 0 && carrito.get(indice) != null) {
             carrito.remove(indice);
@@ -106,11 +112,12 @@ public class controllerVenta {
 
     @PostMapping("/generar-venta")
     public String generarventa(Venta venta, @AuthenticationPrincipal User user,HttpServletRequest request) {
+        
         List<detalle_venta> carrito = this.obtenerCarrito(request);
         double total=0;
         for (detalle_venta det: carrito){
+            det.setProducto(actualizarStock(det.getProducto().getIdProducto(),det.getCantidad()));
             total+=det.getCantidad()*det.getPrecio();
-            det.setVenta(venta);
         }
         venta.setFecha(dtf.format(LocalDateTime.now()));
         venta.setTotal(total);
@@ -123,31 +130,10 @@ public class controllerVenta {
         System.out.println(venta.getFecha());
         System.out.println(venta.getPersonal().getNombre());
         System.out.println(venta.getTotal());
-        
         iventa.save(venta);
         carrito.clear();
         actualizarCarrito(carrito,request);
         
-        /*List<detalle_venta> list = new ArrayList<>();
-        
-        Venta ven= new Venta();
-        
-        ven.setEstado("completaod");
-        ven.setFecha(dtf.format(LocalDateTime.now()));
-        ven.setTotal(120);
-        ven.setCliente(icliente.findById(1L).get());
-        ven.setPersonal(ipersonal.findById(1L).get());
-        
-        detalle_venta de= new  detalle_venta();
-        de.setCantidad(10);
-        de.setCosto(12);
-        de.setPrecio(15);
-        de.setProducto(iproducto.findById(1L).get());
-        de.setTotalxproducto(50);
-        de.setVenta(ven);
-        //ven.setDetventas(list);
-        list.add(de);
-        iventa.save(ven);*/
         return "redirect:/home";
     }
     private List<detalle_venta> obtenerCarrito(HttpServletRequest request) {
@@ -160,5 +146,13 @@ public class controllerVenta {
 
     private void actualizarCarrito(List<detalle_venta> carrito, HttpServletRequest request) {
         request.getSession().setAttribute("carrito", carrito);
+    }
+    private Producto actualizarStock(Long id,int cantidad){
+        Producto producto= new Producto();
+        producto=iproducto.findByIdProducto(id);
+        System.out.println("cantidad anterior: "+producto.getStock());
+        producto.setStock(producto.getStock()-cantidad);
+        System.out.println(" cantidad actual: "+producto.getStock());
+        return producto;
     }
 }

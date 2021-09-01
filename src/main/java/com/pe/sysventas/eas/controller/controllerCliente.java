@@ -5,8 +5,11 @@
  */
 package com.pe.sysventas.eas.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.pe.sysventas.eas.Entidades.Cliente;
+import com.pe.sysventas.eas.Entidades.Views;
 import com.pe.sysventas.eas.Interfaces.ICliente;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +44,23 @@ public class controllerCliente {
     }
 
     @GetMapping("/editar/{id}")
+    @JsonView(Views.Clientes.class)
     public ResponseEntity<Cliente> editarCliente(Cliente cliente) {
 
         return new ResponseEntity<Cliente>(icliente.findById(cliente.getId()).get(), HttpStatus.OK);
+    }
+    
+    @GetMapping("/buscar/{id}")
+    @JsonView(Views.Clientes.class)
+    public ResponseEntity<Cliente> buscarCliente(Cliente cliente) {
+
+        return new ResponseEntity<Cliente>(icliente.findById(cliente.getId()).orElse(null), HttpStatus.OK);
+    }
+    
+    @GetMapping("/clients")
+    @JsonView(Views.Clientes.class)
+    public ResponseEntity<List<Cliente>> clientess(){
+        
+        return new ResponseEntity<List<Cliente>>(icliente.findAll(), HttpStatus.OK);
     }
 }

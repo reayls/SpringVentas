@@ -13,10 +13,10 @@ and open the template in the editor.
         <link th:href="@{/styles.css}" rel="stylesheet"/>
     </head>
     <body>
+        <header th:replace="layout/plantilla :: header"></header>
         <div class="container">
-            <header th:replace="layout/plantilla :: header"></header>
             <h1>Clientes</h1>
-            <button id="nuevoCliente">Nuevo Producto</button>
+            <button id="nuevoCliente" class="btn btn-primary">Nuevo Cliente</button>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -39,24 +39,30 @@ and open the template in the editor.
             </table>
 
             <!-- Modal add and edit-->
-            <div class="modal fade modal-dialog modal-dialog-centered" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div id="editModal" class="modal fade"  tabindex="-1" aria-labelledby="modalProductos" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Datos del Cliente</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form th:action="@{/clientes/guardar}" method="POST" th:object="${cliente}">
 
                                 <input type="hidden" name="id" th:field="*{id}"/>
-                                Nombre: <input type="text" name="nombre" th:field="*{nombre}"/>
-                                <br>
-                                apellido <input type="text" name="apellido" th:field="*{apellido}"/>
-                                <br>
-                                direccion <input type="text" name="direccion" th:field="*{direccion}"/>
-                                <br>
-                                <button type="submit">Guardar</button>
+                                <div class="mb-4">
+                                    <label for="nombre" class="form-label">Nombre del Cliente</label>
+                                    <input type="text" name="nombre" class="form-control" th:field="*{nombre}"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="apellido" class="form-label">Apellidos del Cliente</label>
+                                    <input type="text" name="apellido" class="form-control" th:field="*{apellido}"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="direccion" class="form-label">Dirección del Cliente</label>
+                                    <input type="text" name="direccion" class="form-control" th:field="*{direccion}"/>
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar</button>
                             </form>
                         </div>
                         <div class="modal-footer">

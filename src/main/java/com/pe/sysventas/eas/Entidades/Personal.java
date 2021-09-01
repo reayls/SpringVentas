@@ -38,7 +38,7 @@ public class Personal implements Serializable{
     @JsonIgnore
     private Usuario usuario;
     
-    @ManyToMany(mappedBy = "personal")
+    @ManyToMany(fetch= FetchType.LAZY, mappedBy = "personal")
     @JsonIgnore
     private Set<Venta> ventas; 
     

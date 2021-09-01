@@ -7,7 +7,14 @@ and open the template in the editor.
     Created on : 28/08/2021, 11:36:37 PM
     Author     : Deary
 */
-
+:root{
+    --back-color :  #0f0e17; 
+    --button-color        : #ff8906;
+    --button-text       :  #fffffe; 
+    --main-color      :  #fffffe; 
+    --accent-color          :  #e8ffff; 
+    --secondary-text-color    :  #f25f4c; 
+}
 .nonesty{
     outline:none;
     text-decoration: none;
@@ -15,4 +22,42 @@ and open the template in the editor.
     background: none;
     width: 100%;
     color: white;
+}
+/*****************Reset**************************/
+html{
+    box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 16px;
+    scroll-behavior: smooth;
+    ;}
+*,
+*::after,
+*::before{
+    box-sizing: inherit;
+}
+body{
+    margin:0;
+    padding: 0;
+    overflow-x: hidden;
+}
+.separar{
+    display: flex;
+    justify-content: between;
+}
+
+.bg
+{
+    background-image: url(Exito.jpg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat:no-repeat;
+    background-color: lawngreen;
+}
+.bgcont
+{
+    background-color: lightblue;
+}
+.text-end
+{
+    text-align: right;
 }

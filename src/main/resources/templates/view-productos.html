@@ -13,10 +13,10 @@ and open the template in the editor.
         <link th:href="@{/styles.css}" rel="stylesheet"/>
     </head>
     <body>
+        <header th:replace="layout/plantilla :: header"></header>
         <div class="container">
-            <header th:replace="layout/plantilla :: header"></header>
             <h1>Productos</h1>
-            <button id="nuevoProd">Nuevo Producto</button>
+            <button id="nuevoProd" class="btn btn-primary">Nuevo Producto</button>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -41,26 +41,33 @@ and open the template in the editor.
             </table>
 
             <!-- Modal add and edit-->
-            <div class="modal fade modal-dialog modal-dialog-centered" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" aria-labelledby="modalProductos" aria-hidden="true" id="editModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Datos del Producto</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form th:action="@{/productos/guardar}" method="POST" th:object="${producto}">
-
                                 <input type="hidden" name="nombre" th:field="*{idProducto}"/>
-                                Nombre: <input type="text" name="nombre" th:field="*{nombre}"/>
-                                <br>
-                                Costo: <input type="number" name="costo" th:field="*{costo}"/>
-                                <br>
-                                Precio: <input type="number" name="precio" th:field="*{precio}"/>
-                                <br>
-                                Stock: <input type="number" name="stock" th:field="*{stock}"/>
-                                <br>
-                                <button type="submit">Guardar</button>
+                                <div class="mb-4">
+                                    <label for="nombre" class="form-label">Nombre del Producto</label>
+                                    <input type="text" name="nombre" class="form-control" th:field="*{nombre}"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="costo" class="form-label">Costo del Producto</label>
+                                    <input type="number" step="0.01" name="costo" class="form-control" th:field="*{costo}"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="precio" class="form-label">Precio del Producto</label>
+                                    <input type="number" step="0.01" name="precio" class="form-control" th:field="*{precio}"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="stock" class="form-label">Stock del Producto</label>
+                                    <input type="number" name="stock" class="form-control" th:field="*{stock}"/>
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar</button>
                             </form>
                         </div>
                         <div class="modal-footer">

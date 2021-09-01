@@ -28,20 +28,20 @@ and open the template in the editor.
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="/ventas" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ventas
+                                    Ventas
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="/ventas">Ventas Realizadas</a></li>
                                     <li><a class="dropdown-item" href="/ventas/nueva-venta">Nueva Venta</a></li>
                                 </ul>
                             </li>
                         </ul>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" th:text="${#authentication.getPrincipal().getUsername()}">
                                 Nombre Apellido
                             </button>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
                                 <li><a class="dropdown-item" href="#">Correo</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">
                                         <form th:action="@{/logout}" method="POST">
@@ -50,9 +50,6 @@ and open the template in the editor.
                                     </a>
                                 </li>
                             </ul>
-                        </div>
-                        <div>
-
                         </div>
                     </div>
                 </div>
